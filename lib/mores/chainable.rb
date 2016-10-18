@@ -29,7 +29,7 @@ module Mores::Chainable
     end
 
     def __default_chain
-      @__default_chain ||= Object.new
+      @@__default_chain ||= Object.new
     end
   end
 end

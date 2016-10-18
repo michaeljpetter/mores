@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mores::Chainable do
-  let(:solmyr) {
+  let(:wizard) {
     Class.new.class_exec described_class do |described_class|
       include described_class
       chain :lightning
@@ -22,16 +22,16 @@ describe Mores::Chainable do
 
     context 'overridden' do
       before do
-        solmyr.class_eval do
+        wizard.class_eval do
           def lightning(enemy)
-            @mp >= 24 ? "solmyr zapped #{enemy}!" : super
+            @mp >= 24 ? "wizard zapped #{enemy}!" : super
           end
         end
       end
 
       context 'broken' do
         let(:mp) { 50 }
-        it { is_expected.to eql "solmyr zapped #{enemy}!" }
+        it { is_expected.to eql "wizard zapped #{enemy}!" }
       end
 
       context 'unbroken' do
@@ -42,33 +42,39 @@ describe Mores::Chainable do
   end
 
   context 'unchained' do
-    subject { solmyr.new(mp).lightning enemy }
+    subject { wizard.new(mp).lightning enemy }
     include_examples 'all'
   end
 
   context 'unchained with default' do
     before do
-      solmyr.class_eval do
+      wizard.class_eval do
         chain(:lightning) { |enemy| "#{enemy} unscathed..." }
       end
     end
-    subject { solmyr.new(mp).lightning enemy }
+    subject { wizard.new(mp).lightning enemy }
     include_examples 'all' do
       let(:unbroken_value) { "#{enemy} unscathed..." }
     end
   end
 
   context 'chained' do
-    let(:dracon) {
+    let(:warlock) {
       Class.new do
         def lightning(enemy)
-          "dracon zapped #{enemy}!"
+          "warlock zapped #{enemy}!"
         end
       end
     }
-    subject { (solmyr.new(mp) ** dracon.new).lightning enemy }
+    subject { (wizard.new(mp) ** warlock.new).lightning enemy }
     include_examples 'all' do
-      let(:unbroken_value) { "dracon zapped #{enemy}!" }
+      let(:unbroken_value) { "warlock zapped #{enemy}!" }
     end
+  end
+
+  context 'with super class' do
+    let(:solmyr) { Class.new(wizard) }
+    subject { solmyr.new(mp).lightning enemy }
+    include_examples 'all'
   end
 end
