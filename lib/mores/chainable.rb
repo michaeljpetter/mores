@@ -27,11 +27,17 @@ module Mores
       private
 
       def __forwarder
-        @__forwarder ||= superclass < Chainable ? superclass.__send__(:__forwarder) : Module.new.tap { |m| include m }
+        @__forwarder ||=
+          superclass < Chainable \
+            ? superclass.__send__(:__forwarder)
+            : Module.new.tap { |m| include m }
       end
 
       def __default_chain
-        @__default_chain ||= Class.new(superclass < Chainable ? superclass.__send__(:__default_chain) : Object)
+        @__default_chain ||= Class.new(
+          superclass < Chainable \
+            ? superclass.__send__(:__default_chain)
+            : Object)
       end
     end
   end
