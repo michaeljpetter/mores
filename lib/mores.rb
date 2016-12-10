@@ -1,3 +1,3 @@
 require 'mores/version'
 require 'mores/linked_list'
-require 'mores/chainable'
+require 'mores/succession'
