@@ -4,6 +4,7 @@ module Mores
 
   class Succession
     extend Forwardable
+    extend BlockInitialize
 
     def line(name, &default)
       singleton_class.delegate name => :'__list.head.value'

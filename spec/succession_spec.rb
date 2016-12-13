@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mores::Succession do
   let(:default) { nil }
   let(:succession) {
-    described_class.new.tap { |x| x.line :lightning, &default }
+    described_class.new { |x| x.line :lightning, &default }
   }
   let(:enemy) { %w[Trolls Medusas Troglodytes].sample }
   let(:remaining) { rand 2..20 }
