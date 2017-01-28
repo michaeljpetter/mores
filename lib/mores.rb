@@ -1,5 +1,7 @@
-require 'mores/version'
-require 'mores/block_initialize'
-require 'mores/linked_list'
-require 'mores/succession'
-require 'mores/immutable_struct'
+%w[
+  version
+  block_initialize
+  linked_list
+  succession
+  immutable_struct
+].each { |file| require "mores/#{file}" }
