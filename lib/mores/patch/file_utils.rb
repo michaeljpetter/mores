@@ -15,6 +15,17 @@ module Mores::Patch::FileUtils
       false
     end
 
+    def safe_write(path, string)
+      File.write path, string, mode: File::CREAT | File::EXCL | File::WRONLY
+    rescue Errno::EEXIST
+      ext ||= File.extname path
+      base ||= File.basename(path, ext) << '_0'
+      dir ||= File.dirname(path)
+
+      path = File.join dir, base.next! + ext
+      retry
+    end
+
     private
 
     def stream_blksize(*streams)
