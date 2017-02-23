@@ -80,21 +80,21 @@ describe Mores::Patch::FileUtils do
         let(:existing_entries) { super().push *%w[pwnage.ZvP] }
         let(:filename) { 'pwnage.ZvP' }
 
-        it('writes to next filename') { verify_write to: 'pwnage_1.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_0.ZvP' }
       end
 
       context 'when multiple files exist' do
-        let(:existing_entries) { super().push *%w[pwnage.ZvP pwnage_1.ZvP/ pwnage_3.ZvP] }
+        let(:existing_entries) { super().push *%w[pwnage.ZvP pwnage_0.ZvP/ pwnage_3.ZvP] }
         let(:filename) { 'pwnage.ZvP' }
 
-        it('writes to next filename') { verify_write to: 'pwnage_2.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_1.ZvP' }
       end
 
       context 'when name ends with suffix' do
-        let(:existing_entries) { super().push *%w[pwnage_2.ZvP/ pwnage_2_1.ZvP] }
+        let(:existing_entries) { super().push *%w[pwnage_2.ZvP/ pwnage_2_0.ZvP] }
         let(:filename) { 'pwnage_2.ZvP' }
 
-        it('writes to next filename') { verify_write to: 'pwnage_2_2.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_2_1.ZvP' }
       end
 
       context 'when name is a directory' do

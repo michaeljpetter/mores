@@ -19,10 +19,10 @@ module Mores::Patch::FileUtils
       [path, File.write(path, string, mode: File::CREAT | File::EXCL | File::WRONLY)]
     rescue Errno::EEXIST
       path_fmt ||= File.basename(path, '.*').tap do |base|
-        break path.insert path.rindex(base) + base.length, '%s'
+        break path.insert path.rindex(base) + base.length, '_%d'
       end
-      suffix ||= '_0'
-      path = path_fmt % suffix.next!
+      suffix ||= (0..Float::INFINITY).each
+      path = path_fmt % suffix.next
       retry
     end
 
