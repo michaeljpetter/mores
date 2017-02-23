@@ -65,42 +65,55 @@ describe Mores::Patch::FileUtils do
 
 
     shared_examples 'all' do
-      def verify_write(name, to:)
-        subject[name]
+      def verify_write(to:)
+        expect(subject).to eql [result_dir + to, new_data.bytesize]
         expect(File).to exist dir + to
         expect(File.read dir + to).to eql new_data
       end
 
       context 'when file does not exist' do
-        it('writes to filename') { verify_write 'pwnage.ZvP', to: 'pwnage.ZvP' }
+        let(:filename) { 'pwnage.ZvP' }
+        it('writes to filename') { verify_write to: 'pwnage.ZvP' }
       end
 
       context 'when file exists' do
         let(:existing_entries) { super().push *%w[pwnage.ZvP] }
+        let(:filename) { 'pwnage.ZvP' }
 
-        it('writes to next filename') { verify_write 'pwnage.ZvP', to: 'pwnage_1.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_1.ZvP' }
       end
 
       context 'when multiple files exist' do
         let(:existing_entries) { super().push *%w[pwnage.ZvP pwnage_1.ZvP/ pwnage_3.ZvP] }
+        let(:filename) { 'pwnage.ZvP' }
 
-        it('writes to next filename') { verify_write 'pwnage.ZvP', to: 'pwnage_2.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_2.ZvP' }
       end
 
       context 'when name ends with suffix' do
         let(:existing_entries) { super().push *%w[pwnage_2.ZvP/ pwnage_2_1.ZvP] }
+        let(:filename) { 'pwnage_2.ZvP' }
 
-        it('writes to next filename') { verify_write 'pwnage_2.ZvP', to: 'pwnage_2_2.ZvP' }
+        it('writes to next filename') { verify_write to: 'pwnage_2_2.ZvP' }
+      end
+
+      context 'when name is a directory' do
+        let(:existing_entries) { super().push *%w[pwnage.ZvP/] }
+        let(:filename) { 'pwnage.ZvP/' }
+
+        it('fails') { expect { subject }.to raise_error Errno::EISDIR }
       end
     end
 
     context 'with absolute path' do
-      subject { -> name { FileUtils.safe_write dir + name, new_data } }
+      subject { FileUtils.safe_write dir + filename, new_data }
+      let(:result_dir) { dir }
       include_examples 'all'
     end
 
     context 'with relative path' do
-      subject { -> name { Dir.chdir(dir) { FileUtils.safe_write name, new_data } } }
+      subject { Dir.chdir(dir) { FileUtils.safe_write filename, new_data } }
+      let(:result_dir) { '' }
       include_examples 'all'
     end
   end

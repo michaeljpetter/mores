@@ -16,13 +16,13 @@ module Mores::Patch::FileUtils
     end
 
     def safe_write(path, string)
-      File.write path, string, mode: File::CREAT | File::EXCL | File::WRONLY
+      [path, File.write(path, string, mode: File::CREAT | File::EXCL | File::WRONLY)]
     rescue Errno::EEXIST
-      ext ||= File.extname path
-      base ||= File.basename(path, ext) << '_0'
-      dir ||= File.dirname(path)
-
-      path = File.join dir, base.next! + ext
+      path_fmt ||= File.basename(path, '.*').tap do |base|
+        break path.insert path.rindex(base) + base.length, '%s'
+      end
+      suffix ||= '_0'
+      path = path_fmt % suffix.next!
       retry
     end
 
