@@ -1,7 +1,6 @@
 # Mores
 
-[![Version](http://img.shields.io/gem/v/mores.svg)                        ](https://rubygems.org/gems/mores)
-[![Travis ](https://img.shields.io/travis/michaeljpetter/mores/master.svg)](https://travis-ci.org/michaeljpetter/mores)
+[![Version](http://img.shields.io/gem/v/mores.svg)](https://rubygems.org/gems/mores)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mores`. To experiment with that code, run `bin/console` for an interactive prompt.
 

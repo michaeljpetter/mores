@@ -1,0 +1,20 @@
+stages:
+  - test
+
+.specs: &specs
+  stage: test
+  script:
+    - ruby -v
+    - bundle install
+    - SPEC_OPTS=--tty bundle exec rake
+  tags:
+    - docker
+
+ruby-2.3:
+  <<: *specs
+  image: ruby:2.3-alpine
+
+ruby-latest:
+  <<: *specs
+  image: ruby:alpine
+  allow_failure: true
